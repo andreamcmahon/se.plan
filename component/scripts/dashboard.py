@@ -23,9 +23,11 @@ def _quintile(image, geometry, scale=100):
     return quintile_collection
 
 
+tree_fraction = ee.Image('projects/john-ee-282116/assets/fao-restoration/staging/restoration_potential_gt_treecoverfrac_mask_urban_diff')
 def get_areas(image, geometry, scale=100):
     image = image.rename("image").round()
     pixelArea = ee.Image.pixelArea().divide(10000)
+    pixelArea = pixelArea.multiply(tree_fraction)
     reducer = ee.Reducer.sum().group(1, "image")
 
     areas = (
